@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مكتبة البرومبتات</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>🚀 مكتبة البرومبتات</h1>
+  <p>نسخ البرومبتات مباشرة واستخدامها مع الذكاء الاصطناعي</p>
+</header>
+
+<div class="container" id="promptsContainer"></div>
+
+<footer>
+  © Prompt Library — Share & Earn
+</footer>
+
+<!-- Firebase Scripts -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyA_ebDUQlSHs_5pAqeDwIT48ejqmXHzvSc",
+  authDomain: "fannaan-artist.firebaseapp.com",
+  databaseURL: "https://fannaan-artist-default-rtdb.firebaseio.com",
+  projectId: "fannaan-artist",
+  storageBucket: "fannaan-artist.firebasestorage.app",
+  messagingSenderId: "179346180097",
+  appId: "1:179346180097:web:ca47ce5bc6c889af955800"
+});
+
+const db = firebase.database();
+
+const container = document.getElementById("promptsContainer");
+
+db.ref("prompts").on("value", snapshot => {
+  container.innerHTML = "";
+  const data = snapshot.val();
+  if (data) {
+    Object.values(data).forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <h2>${item.title}</h2>
+        <textarea readonly>${item.prompt}</textarea>
+        <button onclick="copyPrompt(this)">📋 نسخ البرومبت</button>
+      `;
+      container.appendChild(card);
+    });
+  }
+});
+
+function copyPrompt(btn) {
+  let ta = btn.previousElementSibling;
+  ta.select();
+  document.execCommand("copy");
+  alert("✅ تم نسخ البرومبت");
+}
+</script>
+
+</body>
+</html>
