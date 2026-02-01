@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة الأدمن</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>🛠 لوحة التحكم - إضافة برومبت جديد</h1>
+</header>
+
+<div class="container">
+  <label>عنوان البرومبت:</label>
+  <input type="text" id="title" placeholder="ادخل عنوان البرومبت">
+
+  <label>نص البرومبت:</label>
+  <textarea id="promptText" placeholder="ادخل نص البرومبت هنا"></textarea>
+
+  <button onclick="addPrompt()">➕ إضافة البرومبت</button>
+</div>
+
+<footer>
+  © Prompt Library — Admin
+</footer>
+
+<script>
+// Firebase configuration - ضع بياناتك هنا
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+function addPrompt(){
+  const title = document.getElementById('title').value.trim();
+  const prompt = document.getElementById('promptText').value.trim();
+  if(!title||!prompt){alert("يجب ملء جميع الحقول"); return;}
+  db.collection("prompts").add({
+    id: Date.now(),
+    title: title,
+    prompt: prompt
+  }).then(()=>{
+    alert("✅ تم إضافة البرومبت");
+    document.getElementById('title').value='';
+    document.getElementById('promptText').value='';
+  }).catch(err=>{alert(err)});
+}
+</script>
+
+</body>
+</html>
